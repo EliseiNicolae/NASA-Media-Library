@@ -1,4 +1,15 @@
-import {Box, Button, Heading, Input, useToast} from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Heading,
+  Input,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  useToast
+} from '@chakra-ui/react'
 import {useState} from "react";
 import axios from "axios";
 
@@ -34,11 +45,25 @@ export default function Search() {
         <Box display={"flex"} flexDirection={"column"} maxW={250} gap={5}>
           <Input value={text} placeholder={"Text"}
                  onChange={(e) => setText(e.target.value)} required/>
-          <Input type={"number"} value={yearStart} placeholder={"The start year for results"}
-                 onChange={(e) => setYearStart(e.target.value)}/>
-          <Input type={"number"} value={yearEnd} placeholder={"The end year for results"}
-                 onChange={(e) => setYearEnd(e.target.value)}/>
-          <Button type={"submit"}>Search</Button>
+
+          <NumberInput value={yearStart} min={1} onChange={(e) => setYearStart(e)}
+                       max={new Date().getFullYear()}>
+            <NumberInputField placeholder={"The start year for results."}/>
+            <NumberInputStepper>
+              <NumberIncrementStepper/>
+              <NumberDecrementStepper/>
+            </NumberInputStepper>
+          </NumberInput>
+
+          <NumberInput min={1} max={new Date().getFullYear()} value={yearEnd}
+                       onChange={(e) => setYearEnd(e)}>
+            <NumberInputField placeholder={"The end year for results"}/>
+            <NumberInputStepper>
+              <NumberIncrementStepper/>
+              <NumberDecrementStepper/>
+            </NumberInputStepper>
+          </NumberInput>
+          <Button type={"submit"} mt={2}>Search</Button>
         </Box>
       </form>
 
