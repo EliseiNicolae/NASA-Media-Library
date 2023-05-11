@@ -10,22 +10,23 @@ import {
   NumberInputStepper,
   useToast
 } from '@chakra-ui/react'
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import axios from "axios";
+import Results from "../components/Search/Results";
 
 export default function Search() {
   const toast = useToast()
   const [text, setText] = useState<string>('');
   const [yearStart, setYearStart] = useState<string>('');
   const [yearEnd, setYearEnd] = useState<string>('');
-  const [response, setResponse] = useState<any>([]);
+  const [nasaData, setNasaData] = useState<any>([]);
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     if (!text) return;
     axios.get(`https://images-api.nasa.gov/search?q=${text}${yearStart ? `&year_start=${yearStart}` : ''}${yearEnd ? `&year_end=${yearEnd}` : ''}`)
       .then(function (response) {
-        setResponse(response)
+        setNasaData(response.data)
       })
       .catch(function (error) {
         toast({
@@ -67,6 +68,7 @@ export default function Search() {
         </Box>
       </form>
 
+      {useMemo(() => <Results data={nasaData}/>, [nasaData])}
     </Box>
-  )
+  );
 }
