@@ -1,8 +1,9 @@
-import {Box, Button, Heading, Input} from '@chakra-ui/react'
+import {Box, Button, Heading, Input, useToast} from '@chakra-ui/react'
 import {useState} from "react";
 import axios from "axios";
 
 export default function Search() {
+  const toast = useToast()
   const [text, setText] = useState<string>('');
   const [yearStart, setYearStart] = useState<string>('');
   const [yearEnd, setYearEnd] = useState<string>('');
@@ -16,6 +17,12 @@ export default function Search() {
         setResponse(response)
       })
       .catch(function (error) {
+        toast({
+          title: `An error occurred. Unable to search.`,
+          description: error.response.data.reason,
+          status: "error",
+          duration: 9000,
+        })
         console.error(error);
       })
   }
