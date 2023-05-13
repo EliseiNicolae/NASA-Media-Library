@@ -56,6 +56,26 @@ export default function Show() {
         variant='outline'
       >
         {
+          nasaContent?.links?.map((link: any, index: number) => {
+            if (link?.render !== "image") {
+              return null;
+            }
+
+            return (
+              <Image
+                key={`image-${index}`}
+                objectFit='contain'
+                height={390}
+                background={'#f9f9f9'}
+                src={link?.href}
+                alt='Caffe Latte'
+                loading={"lazy"}
+                fallbackSrc={"https://via.placeholder.com/150"}
+              />
+            )
+          })
+        }
+        {
           nasaContent?.data?.map((data: any, index: number) => {
             return (
               <Stack key={`description-${index}`}>
@@ -72,24 +92,6 @@ export default function Show() {
 
                 </CardBody>
               </Stack>
-            )
-          })
-        }
-        {
-          nasaContent?.links?.map((link: any, index: number) => {
-            if (link?.render !== "image") {
-              return null;
-            }
-
-            return (
-              <Image
-                key={`image-${index}`}
-                objectFit='contain'
-                src={link?.href}
-                alt='Caffe Latte'
-                loading={"lazy"}
-                fallbackSrc={"https://via.placeholder.com/150"}
-              />
             )
           })
         }

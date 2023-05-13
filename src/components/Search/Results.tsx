@@ -55,7 +55,7 @@ export default function Results({data}: any) {
                       background={'#f9f9f9'}
                       src={link?.href}
                       w={{base: '100%', sm: '250px'}}
-                      h={{base: '100%', sm: "250px"}}
+                      h={{base: '250px', sm: "250px"}}
                       objectPosition={'50% 50%'}
                       alt={`Image nasa ${card_index}`}
                       loading={"lazy"}
