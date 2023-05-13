@@ -45,9 +45,9 @@ export default function Search() {
       .catch(function (error) {
         toast({
           title: `An error occurred. Unable to search.`,
-          description: error.response.data.reason,
-          status: "error",
+          status: 'error',
           duration: 9000,
+          isClosable: true,
         })
         console.error(error);
       })
