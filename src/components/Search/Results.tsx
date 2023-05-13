@@ -17,7 +17,7 @@ export default function Results({data}: any) {
           .map((item: any, card_index: number) => (
             <Card
               key={`card-${card_index}`}
-              direction={{base: 'column-reverse', sm: 'row'}}
+              direction={{base: 'column-reverse', md: 'row'}}
               overflow='hidden'
               variant='outline'
               mx={{base: 5, md: 10}}
@@ -25,7 +25,7 @@ export default function Results({data}: any) {
             >
               {
                 item?.data?.map((data: any, index: number) => (
-                  <Stack key={`description-${index}`} w={'100%'}>
+                  <Stack key={`description-${index}`} w={{base: '100%', md: 'calc(100% - 250px)'}}>
                     <CardBody>
                       <Heading size='md'>{data?.title}</Heading>
 
@@ -54,9 +54,8 @@ export default function Results({data}: any) {
                       objectFit='contain'
                       background={'#f9f9f9'}
                       src={link?.href}
-                      w={{base: '100%', sm: '250px'}}
-                      h={{base: '250px', sm: "250px"}}
-                      objectPosition={'50% 50%'}
+                      w={{base: '100%', md: '250px'}}
+                      h={{base: '250px'}}
                       alt={`Image nasa ${card_index}`}
                       loading={"lazy"}
                     />

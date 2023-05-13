@@ -18,6 +18,7 @@ import {useContext, useState} from "react";
 import axios from "axios";
 import Results from "../components/Search/Results";
 import {Context} from "../context/ContextProvider";
+import Loading from "../components/Search/Loading";
 
 export default function Search() {
   const toast = useToast()
@@ -31,6 +32,7 @@ export default function Search() {
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     if (!text) return;
+
     setIsLoading(true)
     axios.get(`https://images-api.nasa.gov/search?q=${text}${yearStart ? `&year_start=${yearStart}` : ''}${yearEnd ? `&year_end=${yearEnd}` : ''}`)
       .then(function (response) {
@@ -43,6 +45,13 @@ export default function Search() {
         setNasaData(response.data)
       })
       .catch(function (error) {
+        setCtx({
+          text,
+          yearStart,
+          yearEnd,
+          nasaData: [],
+        })
+        setNasaData([])
         toast({
           title: `An error occurred. Unable to search.`,
           status: 'error',
@@ -54,16 +63,6 @@ export default function Search() {
       .finally(() => {
         setIsLoading(false)
       })
-  }
-
-  const Loading = () => {
-    return <Grid w={'100%'} height={'100%'} px={{base: 5, md: 10}} gap={50} maxW={700}>
-      <Skeleton h={162}/>
-      <Skeleton h={162}/>
-      <Skeleton h={162}/>
-      <Skeleton h={162}/>
-      <Skeleton h={162}/>
-    </Grid>
   }
 
   return (

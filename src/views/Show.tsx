@@ -43,7 +43,7 @@ export default function Show() {
       .finally(() => {
         setIsLoading(false)
       })
-  }, [nasaIdParam, toast])
+  }, [ctx?.nasaData?.collection?.items, nasaIdParam, toast])
 
   const CardDetails = (nasaContent: any) => {
     if (!nasaContent?.data) {
@@ -70,7 +70,6 @@ export default function Show() {
                 src={link?.href}
                 alt='Caffe Latte'
                 loading={"lazy"}
-                fallbackSrc={"https://via.placeholder.com/150"}
               />
             )
           })
