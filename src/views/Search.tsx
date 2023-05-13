@@ -14,24 +14,33 @@ import {
   Text,
   useToast
 } from '@chakra-ui/react'
-import {useState} from "react";
+import {useContext, useState} from "react";
 import axios from "axios";
 import Results from "../components/Search/Results";
+import {Context} from "../context/ContextProvider";
 
 export default function Search() {
   const toast = useToast()
-  const [text, setText] = useState<string>('');
-  const [yearStart, setYearStart] = useState<string>('');
-  const [yearEnd, setYearEnd] = useState<string>('');
-  const [nasaData, setNasaData] = useState<any>([]);
+  const {ctx, setCtx} = useContext(Context);
+  console.log(ctx);
+  const [text, setText] = useState<string>(ctx.text);
+  const [yearStart, setYearStart] = useState<string>(ctx.yearStart);
+  const [yearEnd, setYearEnd] = useState<string>(ctx.yearEnd);
+  const [nasaData, setNasaData] = useState<any>(ctx.nasaData);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
-    setIsLoading(true)
     e.preventDefault();
     if (!text) return;
+    setIsLoading(true)
     axios.get(`https://images-api.nasa.gov/search?q=${text}${yearStart ? `&year_start=${yearStart}` : ''}${yearEnd ? `&year_end=${yearEnd}` : ''}`)
       .then(function (response) {
+        setCtx({
+          text,
+          yearStart,
+          yearEnd,
+          nasaData: response.data,
+        })
         setNasaData(response.data)
       })
       .catch(function (error) {
@@ -47,6 +56,17 @@ export default function Search() {
         setIsLoading(false)
       })
   }
+
+  const Loading = () => {
+    return <Grid w={'100%'} height={'100%'} px={{base: 5, md: 10}} gap={50} maxW={700}>
+      <Skeleton h={162}/>
+      <Skeleton h={162}/>
+      <Skeleton h={162}/>
+      <Skeleton h={162}/>
+      <Skeleton h={162}/>
+    </Grid>
+  }
+
   return (
     <Box display={"flex"} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} mt={50}>
       <Heading display={"flex"} gap={2} mb={50}>
@@ -87,16 +107,7 @@ export default function Search() {
 
       <Divider my={5}/>
 
-      {isLoading ? <Grid w={'100%'} height={'100%'} px={{base: 5, md: 10}} gap={50} maxW={700}>
-          <Skeleton h={162}/>
-          <Skeleton h={162}/>
-          <Skeleton h={162}/>
-          <Skeleton h={162}/>
-          <Skeleton h={162}/>
-        </Grid>
-        :
-        <Results data={nasaData}/>
-      }
+      {isLoading ? <Loading/> : <Results data={nasaData}/>}
     </Box>
   );
 }
