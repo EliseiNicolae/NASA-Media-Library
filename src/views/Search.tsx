@@ -86,6 +86,7 @@ export default function Search() {
       </form>
 
       <Divider my={5}/>
+
       {isLoading ? <Grid w={'100%'} height={'100%'} px={{base: 5, md: 10}} gap={50} maxW={700}>
           <Skeleton h={162}/>
           <Skeleton h={162}/>

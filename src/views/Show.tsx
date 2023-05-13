@@ -29,7 +29,7 @@ export default function Show() {
       .finally(() => {
         setIsLoading(false)
       })
-  }, [])
+  }, [nasaIdParam, toast])
 
   const CardDetails = (nasaContent: any) => {
     if (!nasaContent?.data) {
