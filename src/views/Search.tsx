@@ -1,6 +1,8 @@
 import {
   Box,
   Button,
+  Divider,
+  Grid,
   Heading,
   Input,
   NumberDecrementStepper,
@@ -8,9 +10,10 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Skeleton,
   useToast
 } from '@chakra-ui/react'
-import {useMemo, useState} from "react";
+import {useState} from "react";
 import axios from "axios";
 import Results from "../components/Search/Results";
 
@@ -20,8 +23,10 @@ export default function Search() {
   const [yearStart, setYearStart] = useState<string>('');
   const [yearEnd, setYearEnd] = useState<string>('');
   const [nasaData, setNasaData] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    setIsLoading(true)
     e.preventDefault();
     if (!text) return;
     axios.get(`https://images-api.nasa.gov/search?q=${text}${yearStart ? `&year_start=${yearStart}` : ''}${yearEnd ? `&year_end=${yearEnd}` : ''}`)
@@ -36,6 +41,9 @@ export default function Search() {
           duration: 9000,
         })
         console.error(error);
+      })
+      .finally(() => {
+        setIsLoading(false)
       })
   }
 
@@ -68,7 +76,17 @@ export default function Search() {
         </Box>
       </form>
 
-      {useMemo(() => <Results data={nasaData}/>, [nasaData])}
+      <Divider my={5}/>
+      {isLoading ? <Grid w={'100%'} height={'100%'} px={{base: 5, md: 10}} gap={50} maxW={700}>
+          <Skeleton h={162}/>
+          <Skeleton h={162}/>
+          <Skeleton h={162}/>
+          <Skeleton h={162}/>
+          <Skeleton h={162}/>
+        </Grid>
+        :
+        <Results data={nasaData}/>
+      }
     </Box>
   );
 }
