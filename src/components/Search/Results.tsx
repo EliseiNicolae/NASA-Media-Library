@@ -1,5 +1,6 @@
 import {Box, Button, Card, CardBody, CardFooter, Heading, Image, Stack, Text} from "@chakra-ui/react";
 import {Link} from 'react-router-dom';
+import {INasaCardDetails, INasaDescription, INasaImage} from "../../models/NASA";
 
 export default function Results({data}: any) {
   if (data.length === 0) {
@@ -14,7 +15,7 @@ export default function Results({data}: any) {
     <div>
       <Box display={"flex"} gap={50} flexDirection={"column"}>
         {data?.collection?.items
-          .map((item: any, card_index: number) => (
+          .map((item: INasaCardDetails, card_index: number) => (
             <Card
               key={`card-${card_index}`}
               direction={{base: 'column-reverse', md: 'row'}}
@@ -24,7 +25,7 @@ export default function Results({data}: any) {
               maxW={700}
             >
               {
-                item?.data?.map((data: any, index: number) => (
+                item?.data?.map((data: INasaDescription, index: number) => (
                   <Stack key={`description-${index}`} w={{base: '100%', md: 'calc(100% - 250px)'}}>
                     <CardBody>
                       <Heading size='md'>{data?.title}</Heading>
@@ -46,7 +47,7 @@ export default function Results({data}: any) {
                 ))
               }
               {
-                item?.links?.map((link: any, index: number) => {
+                item?.links?.map((link: INasaImage, index: number) => {
                   if (link?.render !== "image") return null;
                   return (
                     <Image

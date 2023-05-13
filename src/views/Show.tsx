@@ -3,6 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import {Box, Button, Card, CardBody, Divider, Heading, Image, Stack, Text, useToast} from "@chakra-ui/react";
 import {Context} from "../context/ContextProvider";
 import axios from "axios";
+import {INasaCardDetails, INasaDescription, INasaImage} from "../models/NASA";
 
 export default function Show() {
   const toast = useToast();
@@ -15,7 +16,7 @@ export default function Show() {
 
   useEffect(() => {
     setIsLoading(true);
-    const contentFromContext = ctx?.nasaData?.collection?.items.find((item: any) => {
+    const contentFromContext = ctx?.nasaData?.collection?.items.find((item: INasaCardDetails) => {
       if (item.data[0].nasa_id === nasaIdParam) {
         return item
       }
@@ -45,7 +46,7 @@ export default function Show() {
       })
   }, [ctx?.nasaData?.collection?.items, nasaIdParam, toast])
 
-  const CardDetails = (nasaContent: any) => {
+  const CardDetails = (nasaContent: INasaCardDetails) => {
     if (!nasaContent?.data) {
       return <Text>No results found!</Text>
     }
@@ -56,7 +57,7 @@ export default function Show() {
         variant='outline'
       >
         {
-          nasaContent?.links?.map((link: any, index: number) => {
+          nasaContent?.links?.map((link: INasaImage, index: number) => {
             if (link?.render !== "image") {
               return null;
             }
@@ -75,7 +76,7 @@ export default function Show() {
           })
         }
         {
-          nasaContent?.data?.map((data: any, index: number) => {
+          nasaContent?.data?.map((data: INasaDescription, index: number) => {
             return (
               <Stack key={`description-${index}`}>
                 <CardBody>

@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Divider,
-  Grid,
   Heading,
   Input,
   NumberDecrementStepper,
@@ -10,7 +9,6 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  Skeleton,
   Text,
   useToast
 } from '@chakra-ui/react'
