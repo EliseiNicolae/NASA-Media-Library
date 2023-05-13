@@ -22,7 +22,6 @@ import {Context} from "../context/ContextProvider";
 export default function Search() {
   const toast = useToast()
   const {ctx, setCtx} = useContext(Context);
-  console.log(ctx);
   const [text, setText] = useState<string>(ctx.text);
   const [yearStart, setYearStart] = useState<string>(ctx.yearStart);
   const [yearEnd, setYearEnd] = useState<string>(ctx.yearEnd);

@@ -1,10 +1,12 @@
 import {Link, useLocation} from "react-router-dom";
-import {useEffect, useState} from "react";
-import axios from "axios";
+import {useContext, useEffect, useState} from "react";
 import {Box, Button, Card, CardBody, Divider, Heading, Image, Stack, Text, useToast} from "@chakra-ui/react";
+import {Context} from "../context/ContextProvider";
+import axios from "axios";
 
 export default function Show() {
-  const toast = useToast()
+  const toast = useToast();
+  const {ctx} = useContext(Context);
   const location = useLocation();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [nasaContent, setNasaContent] = useState<any>([]);
@@ -13,6 +15,18 @@ export default function Show() {
 
   useEffect(() => {
     setIsLoading(true);
+    const contentFromContext = ctx?.nasaData?.collection?.items.find((item: any) => {
+      if (item.data[0].nasa_id === nasaIdParam) {
+        return item
+      }
+      return false
+    });
+
+    if (contentFromContext) {
+      setIsLoading(false)
+      return setNasaContent(contentFromContext)
+    }
+
     axios.get(`https://images-api.nasa.gov/search?nasa_id=${nasaIdParam}`)
       .then(function (response) {
         setNasaContent(response.data.collection.items[0])

@@ -2,7 +2,6 @@ import {Box, Button, Card, CardBody, CardFooter, Heading, Image, Stack, Text} fr
 import {Link} from 'react-router-dom';
 
 export default function Results({data}: any) {
-  console.log("test", data)
   if (data.length === 0) {
     return null;
   }
