@@ -1,7 +1,7 @@
 import {Link, useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {Box, Button, Card, CardBody, Heading, Image, Stack, Text, useToast} from "@chakra-ui/react";
+import {Box, Button, Card, CardBody, Divider, Heading, Image, Stack, Text, useToast} from "@chakra-ui/react";
 
 export default function Show() {
   const toast = useToast()
@@ -12,6 +12,7 @@ export default function Show() {
   const nasaIdParam = decodeURIComponent(searchParams.get('nasa_id') || "");
 
   useEffect(() => {
+    setIsLoading(true);
     axios.get(`https://images-api.nasa.gov/search?nasa_id=${nasaIdParam}`)
       .then(function (response) {
         setNasaContent(response.data.collection.items[0])
@@ -30,61 +31,73 @@ export default function Show() {
       })
   }, [])
 
+  const CardDetails = (nasaContent: any) => {
+    if (!nasaContent?.data) {
+      return <Text>No results found!</Text>
+    }
+
+    return (
+      <Card
+        overflow='hidden'
+        variant='outline'
+      >
+        {
+          nasaContent?.data?.map((data: any, index: number) => {
+            return (
+              <Stack key={`description-${index}`}>
+                <CardBody>
+                  <Heading size='md'>{data?.title}</Heading>
+                  <Divider my={2}/>
+                  {data?.location && <Text py={2}>
+                    <b>Location</b>: {data?.location}
+                  </Text>}
+                  {data?.photographer && <Text><b>Photographer</b>: {data?.photographer}</Text>}
+                  {data?.description && <Text><b>Description</b>: {data?.description}</Text>}
+                  {data?.keywords && <Text><b>Keywords</b>: {data?.keywords.join(", ")}</Text>}
+                  {data?.date_created && <Text><b>Created</b>: {data?.date_created}</Text>}
+
+                </CardBody>
+              </Stack>
+            )
+          })
+        }
+        {
+          nasaContent?.links?.map((link: any, index: number) => {
+            if (link?.render !== "image") {
+              return null;
+            }
+
+            return (
+              <Image
+                key={`image-${index}`}
+                objectFit='contain'
+                src={link?.href}
+                alt='Caffe Latte'
+                loading={"lazy"}
+                fallbackSrc={"https://via.placeholder.com/150"}
+              />
+            )
+          })
+        }
+      </Card>
+    )
+  }
+
   return (
     <div>
       <Box display={"flex"}
-           flexDirection={"column"}
+           flexDirection={{base: "column", md: "row"}}
            gap={10}
            mx={{base: 10, md: "auto"}}
            my={{base: 10, md: 20}}
            maxW={700}>
-        <Button w={'fit-content'}>
-          <Link to={"/search"}>Back</Link>
-        </Button>
-        <Card
-          overflow='hidden'
-          variant='outline'
-        >
-          {
-            nasaContent?.data?.map((data: any, index: number) => {
-              return (
-                <Stack key={`description-${index}`}>
-                  <CardBody>
-                    <Heading size='md'>{data?.title}</Heading>
+        <Link to={"/search"}>
+          <Button w={'fit-content'}>
+            ⬅️ Back
+          </Button>
+        </Link>
 
-                    {data?.location && <Text py={2}>
-                      Location: {data?.location}
-                    </Text>}
-                    {data?.photographer && <Text><b>Photographer</b>: {data?.photographer}</Text>}
-                    {data?.description && <Text><b>Description</b>: {data?.description}</Text>}
-                    {data?.keywords && <Text><b>Keywords</b>: {data?.keywords.join(", ")}</Text>}
-                    {data?.date_created && <Text><b>Created</b>: {data?.date_created}</Text>}
-
-                  </CardBody>
-                </Stack>
-              )
-            })
-          }
-          {
-            nasaContent?.links?.map((link: any, index: number) => {
-              if (link?.render !== "image") {
-                return null;
-              }
-
-              return (
-                <Image
-                  key={`image-${index}`}
-                  objectFit='cover'
-                  src={link?.href}
-                  w={{base: '100%'}}
-                  alt='Caffe Latte'
-                  loading={"lazy"}
-                  fallbackSrc={"https://via.placeholder.com/150"}
-                />
-              )
-            })
-          }
-        </Card>
+        {isLoading ? <Text>Loading...</Text> : <CardDetails {...nasaContent} />}
       </Box>
     </div>
   );

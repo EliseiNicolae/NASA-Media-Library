@@ -11,6 +11,7 @@ import {
   NumberInputField,
   NumberInputStepper,
   Skeleton,
+  Text,
   useToast
 } from '@chakra-ui/react'
 import {useState} from "react";
@@ -46,10 +47,18 @@ export default function Search() {
         setIsLoading(false)
       })
   }
-
   return (
     <Box display={"flex"} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} mt={50}>
-      <Heading mb={15}>Search</Heading>
+      <Heading display={"flex"} gap={2} mb={50}>
+        <Text>Search</Text>
+        <img
+          src={"./nasa_logo.png"}
+          alt='Caffe Latte'
+          loading={"lazy"}
+          width={40}
+        />
+        <Text>events</Text>
+      </Heading>
       <form onSubmit={handleSubmit}>
         <Box display={"flex"} flexDirection={"column"} maxW={250} gap={5}>
           <Input value={text} placeholder={"Text"}
