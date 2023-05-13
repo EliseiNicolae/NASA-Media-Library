@@ -104,7 +104,7 @@ export default function Show() {
       <Box display={"flex"}
            flexDirection={{base: "column", md: "row"}}
            gap={10}
-           mx={{base: 10, md: "auto"}}
+           mx={{base: 5, md: "auto"}}
            my={{base: 10, md: 20}}
            maxW={700}>
         <Link to={"/search"}>
